@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}这是首页{% endblock %}
+
+{% block main %}
+  <h1>User Login</h1>
+  <form action="/login" method="post">
+    <p>用户名：<input type="text" name="name" value=""/></p>
+    <p>密码：<input type="password" name="password"/></p>
+    <p><input type="submit" value="Submit"/></p>
+  </form>
+{% endblock %}

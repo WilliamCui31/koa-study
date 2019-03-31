@@ -1,0 +1,29 @@
+{
+  "name": "koa-test",
+  "version": "1.0.0",
+  "description": "study for koa2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "koa2"
+  ],
+  "author": "WilliamCui",
+  "license": "ISC",
+  "dependencies": {
+    "cookies": "^0.7.3",
+    "koa": "^2.6.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "mime": "^2.4.0",
+    "mysql2": "^1.6.4",
+    "mz": "^2.7.0",
+    "node-uuid": "^1.4.8",
+    "nunjucks": "^3.1.6",
+    "sequelize": "^4.42.0",
+    "url": "^0.11.0",
+    "ws": "^6.2.0"
+  }
+}

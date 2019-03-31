@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}聊天室{% endblock %}
+
+{% block main %}
+  <h1>Welcome {{user.name}} Join!
+  </h1>
+  <div id="chat-box">
+    <ul class="user-list">
+      <li v-for="item in users">
+        <span class="avatar" v-text="item.name[0].toUpperCase()"></span>
+        <span v-text="item.name"></span>
+      </li>
+    </ul>
+    <ul class="message-list" id="messageList">
+      <li v-for="msg in messages" :class="{ chat: msg.type === 'chat', self: msg.type === 'chat' && msg.user.name === name }">
+        <h3 v-if="msg.type === 'chat'">
+          <span class="avatar" v-text="msg.user.name[0].toUpperCase()"></span>
+          <span v-text="msg.user.name"></span>
+        </h3>
+        <p v-text="`${msg.type === 'chat' ? '' : new Date().toLocaleString() + ' '} ${msg.data}`"></p>
+      </li>
+    </ul>
+    <div class="say">
+      <input type="text" class="message" v-model="msg" @keyup.enter="sendMsg">
+      <button class="send" @click="sendMsg">发送</button>
+    </div>
+  </div>
+  <script>
+    const {protocol, host} = window.location;
+    const ws = new WebSocket(`${protocol.replace('http', 'ws')}//${host}/ws/chat`);
+    ws.onmessage = function (evt) {
+      const msg = JSON.parse(evt.data);
+      const {type, data} = msg;
+      switch (type) {
+        case 'list':
+          chatVM.users = data;
+          break;
+        default:
+          chatVM
+            .messages
+            .push(msg);
+      }
+    }
+    ws.onclose = function (evt) {
+      console.log(`[WebSocket] error: ${evt.code}`);
+    }
+    ws.onerror = function (code, error) {
+      console.log(`[WebSocket] ${cdoe}: ${error}`)
+    }
+
+    const chatVM = new Vue({
+      el: '#chat-box',
+      data: {
+        name: '{{user.name}}',
+        msg: '',
+        users: [],
+        messages: []
+      },
+      watch: {
+        messages: function () {
+          this.$nextTick(function () {
+            var messageList = document.getElementById('messageList');
+            messageList.scrollTop = messageList.scrollHeight;
+          })
+        }
+      },
+      methods: {
+        sendMsg: function () {
+          if (this.msg.trim()) {
+            ws.send(this.msg);
+          }
+          this.msg = '';
+        }
+      }
+    });
+  </script>
+{% endblock %}

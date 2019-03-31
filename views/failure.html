@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{type}} Failed{% endblock %}
+
+{% block main %}
+  <h1>{{type}} Failed</h1>
+  <p>
+    <a href="javascript: history.back(-1);">Try Again</a>
+  </p>
+{% endblock %}

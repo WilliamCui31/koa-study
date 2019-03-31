@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}{{type}} Success{% endblock %}
+
+{% block main %}
+  <h1>Welcome {{ name }}, {{type}} Success! <a href="/logout">退出</a></h1>
+  <a href="/chat">聊天室</a>
+  <a href="/product">商城</a>
+{% endblock %}

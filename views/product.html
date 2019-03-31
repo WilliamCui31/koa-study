@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}聊天室{% endblock %}
+
+{% block main %}
+  <h1>Welcome {{user.name}}! <a href="#" onclick="history.back()">返回</a>
+  </h1>
+  <div id="product">
+    <div class="list">
+      <h2>Products</h2>
+      <ul>
+        <li>
+          <div class="name">Product</div>
+          <div class="price">Price</div>
+        </li>
+        <li v-for="product in products">
+          <div class="name">
+            <strong v-text="product.name"></strong>
+            <span v-text="product.manufacturer"></span>
+            <a href="#" @click="deleteProduct(product.id)">delete</a>
+          </div>
+          <div class="price">
+            <span v-text="'￥' + product.price"></span>
+            <a href="#">Buy</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="create">
+      <h2>Create New Product</h2>
+      <ul>
+        <li>
+          <label>Name</label>
+          <input type="text" v-model.trim="name">
+        </li>
+        <li>
+          <label>Manufacturer</label>
+          <input type="text" v-model.trim="manufacturer">
+        </li>
+        <li>
+          <label>Price</label>
+          <input type="number" v-model.trim.number="price" @keyup.enter="createProduct">
+        </li>
+        <li>
+          <button @click="createProduct">Create</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    const productVM = new Vue({
+      el: '#product',
+      data: {
+        name: '',
+        manufacturer: '',
+        price: '',
+        products: []
+      },
+      created: function () {
+        this.getProducts();
+      },
+      methods: {
+        getProducts: function () {
+          $
+            .getJSON('/api/products')
+            .done(data => {
+              this.products = data.products;
+            })
+            .fail((jqXHR, textStatus) => {
+              alert('Error: ' + jqXHR.status);
+            });
+        },
+        createProduct: function () {
+          const product = {
+            name: this.name,
+            price: this.price,
+            manufacturer: this.manufacturer
+          }
+          $
+            .ajax({type: 'post', dataType: 'json', contentType: 'application/json', url: '/api/products', data: JSON.stringify(product)})
+            .done(p => {
+              this
+                .products
+                .push(p);
+              this.name = '';
+              this.price = '';
+              this.manufacturer = '';
+            })
+            .fail((jqXHR, textStatus) => {
+              alert('Error: ' + jqXHR.status);
+            });
+        },
+        deleteProduct: function (id) {
+          $.ajax({type: 'delete', dataType: 'json', contentType: 'application/json', url: `/api/products/${id}`}).done(status => {
+              const index = this.products.findIndex(product => product.id === id);
+              this.products.splice(index, 1);
+            }).fail((jqXHR, textStatus) => {
+              alert('Error: ' + jqXHR.status);
+            });
+          }
+        }
+      });
+  </script>
+{% endblock %}
