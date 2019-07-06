@@ -3,7 +3,7 @@ const APIError = require('../rest').APIError;
 
 module.exports = {
   'get /api/products': async (ctx, next) => {
-    const products = await Product.findAll();
+    const products = await Product.findAll({order: [['price', 'DESC']]});
     ctx.rest({ products });
   },
 

@@ -78,9 +78,7 @@
           $
             .ajax({type: 'post', dataType: 'json', contentType: 'application/json', url: '/api/products', data: JSON.stringify(product)})
             .done(p => {
-              this
-                .products
-                .push(p);
+              this.getProducts();
               this.name = '';
               this.price = '';
               this.manufacturer = '';

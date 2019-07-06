@@ -36,13 +36,13 @@ function defineModel(name, attributes) {
       attrs[key] = value;
     } else {
       attrs[key] = {
-        type: attributes[key],
+        type: value,
         allowNull: false
       };
     }
   }
 
-  [('createdAt', 'updatedAt', 'version')].forEach(key => {
+  ['createdAt', 'updatedAt', 'version'].forEach(key => {
     attrs[key] = {
       type: Sequelize.BIGINT,
       allowNull: false
@@ -53,7 +53,7 @@ function defineModel(name, attributes) {
     tableName: name,
     timestamp: false,
     hooks: {
-      beforeValidate: function (obj) {
+      beforeValidate: function(obj) {
         const now = Date.now();
         if (obj.isNewRecord) {
           if (!obj.id) {
