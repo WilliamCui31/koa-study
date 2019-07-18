@@ -43,20 +43,6 @@ app.use(rest.restify());
 // 添加路由
 app.use(controller(router));
 
-app.use(cors({
-  origin: function (ctx) {
-      if (ctx.url === '/cors') {
-          return "*"; // 允许来自所有域名请求
-      }
-      return 'http://localhost:3001';
-  },
-  exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
-  maxAge: 5,
-  credentials: true,
-  allowMethods: ['GET', 'POST', 'DELETE'], //设置允许的HTTP请求类型
-  allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
-}));
-
 // 启动Koa
 const server = app.listen(3000);
 
